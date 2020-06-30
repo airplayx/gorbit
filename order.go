@@ -6,10 +6,9 @@ import (
 	"time"
 )
 
-//生成单号
 func GetOrderSn(sum int) string {
 	str := time.Now().Format("06")
-	days := strconv.Itoa(GetDaysInYearByThisYear())
+	days := strconv.Itoa(GetDaysInYear())
 	count := len(days)
 	if count < 3 {
 		days = strings.Repeat("0", 3-count) + days
@@ -28,8 +27,7 @@ func GetOrderSn(sum int) string {
 	return str
 }
 
-//年中的第几天
-func GetDaysInYearByThisYear() int {
+func GetDaysInYear() int {
 	now := time.Now()
 	total := 0
 	arr := []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}

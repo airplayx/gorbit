@@ -7,20 +7,6 @@ import (
 	"runtime"
 )
 
-func Error(message string) *err {
-	var err = &err{}
-	err.Message = message
-	return err
-}
-
-func Parse(s string) *err {
-	var e *err
-	if err := json.Unmarshal([]byte(s), &e); err != nil {
-		return Error(s)
-	}
-	return e
-}
-
 type err struct {
 	Message string      `json:"message,omitempty"`
 	File    string      `json:"file,omitempty"`
@@ -59,4 +45,13 @@ func (e err) Location() *err {
 func (e err) WithData(data interface{}) *err {
 	e.Data = data
 	return &e
+}
+
+func Parse(s string) *err {
+	var e *err
+	if err := json.Unmarshal([]byte(s), &e); err != nil {
+		e.Message = s
+		return e
+	}
+	return e
 }

@@ -31,7 +31,6 @@ func GetFileUpTime(file string) int64 {
 		return time.Now().Unix()
 	}
 	defer f.Close()
-
 	fi, err := f.Stat()
 	if err != nil {
 		log.Println("stat fileinfo err")

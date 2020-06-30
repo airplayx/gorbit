@@ -9,7 +9,6 @@ import (
 	"time"
 )
 
-// 生成sign
 func MakeSign(params map[string]string, key string) string {
 	var keys []string
 	var sorted []string
@@ -27,10 +26,9 @@ func MakeSign(params map[string]string, key string) string {
 	return fmt.Sprintf("%X", md5.Sum([]byte(str)))
 }
 
-// 产生随机字符串
 func GetNonceStr(n int) string {
+	var value []byte
 	chars := []byte("abcdefghijklmnopqrstuvwxyz0123456789")
-	value := []byte{}
 	m := len(chars)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < n; i++ {
