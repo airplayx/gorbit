@@ -11,13 +11,15 @@ import (
 	"os"
 )
 
-const goDefaultTpl = `type {{.Name}} {{if .IsArray}}[]{{end}}struct {
+const (
+	goDefaultTpl = `type {{.Name}} {{if .IsArray}}[]{{end}}struct {
 `
-const goArrayTpl = `_ {{if .IsArray}}[]{{end}}struct {
+	goArrayTpl = `_ {{if .IsArray}}[]{{end}}struct {
 `
-const goATplEmpty = `_ {{if .IsArray}}[]{{end}}struct {
+	goATplEmpty = `_ {{if .IsArray}}[]{{end}}struct {
 }
 `
+)
 
 //Model ...
 type Model struct {

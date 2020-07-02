@@ -1,7 +1,6 @@
 package gorbit
 
 import (
-	"log"
 	"math/rand"
 	"os"
 	"sort"
@@ -10,13 +9,13 @@ import (
 	"time"
 )
 
-func GetRandomString(l int, isNum bool) string {
+func RandomStr(l int, isNum bool) string {
 	str := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	if isNum {
 		str = "0123456789"
 	}
 	bytes := []byte(str)
-	result := []byte{}
+	var result []byte
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < l; i++ {
 		result = append(result, bytes[r.Intn(len(bytes))])
@@ -24,22 +23,20 @@ func GetRandomString(l int, isNum bool) string {
 	return string(result)
 }
 
-func GetFileUpTime(file string) int64 {
+func FileUpTime(file string) (int64, error) {
 	f, err := os.Open(file)
 	if err != nil {
-		log.Println("open file err")
-		return time.Now().Unix()
+		return time.Now().Unix(), err
 	}
 	defer f.Close()
 	fi, err := f.Stat()
 	if err != nil {
-		log.Println("stat fileinfo err")
-		return time.Now().Unix()
+		return time.Now().Unix(), err
 	}
-	return fi.ModTime().Unix()
+	return fi.ModTime().Unix(), nil
 }
 
-func GetVersion(ver string, upTime *time.Time) string {
+func SetVersion(ver string, upTime *time.Time) string {
 	total := 0
 	arr := []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 	y, month, d := upTime.Date()

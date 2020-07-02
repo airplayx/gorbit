@@ -11,8 +11,12 @@ import (
 	"strings"
 )
 
-func AesEncrypt(key []byte, text string) (string, error) {
-	block, err := aes.NewCipher(key)
+var (
+	AesKey     = []byte(`test_my_code_!!!`)
+	block, err = aes.NewCipher(AesKey)
+)
+
+func AesEncrypt(text string) (string, error) {
 	if err != nil {
 		return "", err
 	}
@@ -24,16 +28,15 @@ func AesEncrypt(key []byte, text string) (string, error) {
 	}
 	cfb := cipher.NewCFBEncrypter(block, iv)
 	cfb.XORKeyStream(cipherText[aes.BlockSize:], msg)
-	finalMsg := removeBase64Padding(base64.URLEncoding.EncodeToString(cipherText))
+	finalMsg := unPadding(base64.URLEncoding.EncodeToString(cipherText))
 	return finalMsg, nil
 }
 
-func AesDecrypt(key []byte, text string) (string, error) {
-	block, err := aes.NewCipher(key)
+func AesDecrypt(text string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	decodedMsg, err := base64.URLEncoding.DecodeString(addBase64Padding(text))
+	decodedMsg, err := base64.URLEncoding.DecodeString(padding(text))
 	if err != nil {
 		return "", err
 	}
@@ -51,7 +54,7 @@ func AesDecrypt(key []byte, text string) (string, error) {
 	return string(unPadMsg), nil
 }
 
-func addBase64Padding(value string) string {
+func padding(value string) string {
 	m := len(value) % 4
 	if m != 0 {
 		value += strings.Repeat("=", 4-m)
@@ -59,7 +62,7 @@ func addBase64Padding(value string) string {
 	return value
 }
 
-func removeBase64Padding(value string) string {
+func unPadding(value string) string {
 	return strings.Replace(value, "=", "", -1)
 }
 
@@ -73,7 +76,7 @@ func unPad(src []byte) ([]byte, error) {
 	length := len(src)
 	unPadding := int(src[length-1])
 	if unPadding > length {
-		return nil, errors.New("unPad error. This could happen when incorrect encryption key is used")
+		return nil, errors.New("unPad e. This could happen when incorrect encryption key is used")
 	}
 	return src[:(length - unPadding)], nil
 }

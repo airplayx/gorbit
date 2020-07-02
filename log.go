@@ -12,16 +12,16 @@ import (
 type Level int
 
 var (
-	F *os.File
+	f *os.File
 
 	DefaultPrefix      = ""
 	DefaultCallerDepth = 2
 
 	logger      *log.Logger
-	logPrefix   = ""
+	logPrefix   string
 	levelFlags  = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
-	logSavePath = ".logs/"
-	logFileExt  = "log"
+	LogSavePath = ".logs/"
+	LogFileExt  = "log"
 )
 
 const (
@@ -34,49 +34,38 @@ const (
 
 func Debug(v ...interface{}) {
 	file := setPrefix(DEBUG)
-	defer func() {
-		logger.Println(v)
-		_ = file.Close()
-	}()
+	defer file.Close()
+	logger.Println(v...)
 }
 
 func Info(v ...interface{}) {
 	file := setPrefix(INFO)
-	defer func() {
-		logger.Println(v)
-		_ = file.Close()
-	}()
+	defer file.Close()
+	logger.Println(v...)
 }
 
 func Warn(v ...interface{}) {
 	file := setPrefix(WARNING)
-	defer func() {
-		logger.Println(v)
-		_ = file.Close()
-	}()
+	defer file.Close()
+	logger.Println(v...)
 }
 
 func Error(v ...interface{}) {
 	file := setPrefix(ERROR)
-	defer func() {
-		logger.Println(v)
-		_ = file.Close()
-	}()
+	defer file.Close()
+	logger.Println(v...)
 }
 
 func Fatal(v ...interface{}) {
 	file := setPrefix(FATAL)
-	defer func() {
-		logger.Println(v)
-		_ = file.Close()
-	}()
+	defer file.Close()
+	logger.Println(v...)
 }
 
 func setPrefix(level Level) *os.File {
 	filePath := getLogFileFullPath(level)
-	F = openLogFile(filePath)
-	logger = log.New(F, DefaultPrefix, log.LstdFlags)
-
+	f, _ = openLogFile(filePath)
+	logger = log.New(f, DefaultPrefix, log.LstdFlags)
 	_, file, line, ok := runtime.Caller(DefaultCallerDepth)
 	if ok {
 		logPrefix = fmt.Sprintf("[%s] %s:%d ", levelFlags[level], filepath.Clean(file), line)
@@ -84,31 +73,30 @@ func setPrefix(level Level) *os.File {
 		logPrefix = fmt.Sprintf("[%s] ", levelFlags[level])
 	}
 	logger.SetPrefix(logPrefix)
-	return F
+	return f
 }
 
 func getLogFilePath() string {
-	return fmt.Sprintf("%s/", logSavePath)
+	return fmt.Sprintf("%s/", LogSavePath)
 }
 
 func getLogFileFullPath(level Level) string {
-	suffixPath := fmt.Sprintf("%s.%s", levelFlags[level]+"-"+time.Now().Format("2006-01-02"), logFileExt)
+	suffixPath := fmt.Sprintf("%s.%s", levelFlags[level]+"-"+time.Now().Format("2006-01-02"), LogFileExt)
 	return fmt.Sprintf("%s%s", getLogFilePath(), suffixPath)
 }
 
-func openLogFile(filePath string) *os.File {
+func openLogFile(filePath string) (*os.File, error) {
 	_, err := os.Stat(filePath)
 	switch {
 	case os.IsNotExist(err):
 		dir, _ := os.Getwd()
 		_ = os.MkdirAll(dir+"/"+getLogFilePath(), os.ModePerm)
 	case os.IsPermission(err):
-		log.Fatalf("Permission :%v", err)
+		return nil, err
 	}
-
 	handle, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatalf("Fail to OpenFile :%v", err)
+		return nil, err
 	}
-	return handle
+	return handle, nil
 }

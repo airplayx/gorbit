@@ -7,17 +7,14 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+var (
+	invalid = errors.New("couldn't handle this token")
+	SignKey = "test.me"
+)
+
 type JWT struct {
 	SigningKey []byte
 }
-
-var (
-	TokenExpired     = errors.New("token is expired")
-	TokenNotValidYet = errors.New("token not active yet")
-	TokenMalformed   = errors.New("that's not even a token")
-	TokenInvalid     = errors.New("couldn't handle this token")
-	SignKey          = "test.me"
-)
 
 type CustomClaims struct {
 	User interface{} `json:"user"`
@@ -46,20 +43,21 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, TokenMalformed
+				return nil, errors.New("that's not even a token")
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				return nil, TokenExpired
+				return nil, errors.New("token is expired")
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, TokenNotValidYet
+				return nil, errors.New("token not active yet")
 			} else {
-				return nil, TokenInvalid
+				return nil, invalid
 			}
 		}
+		return nil, err
 	}
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims, nil
 	}
-	return nil, TokenInvalid
+	return nil, invalid
 }
 
 func (j *JWT) RefreshToken(tokenString string) (string, error) {
@@ -77,5 +75,5 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 		claims.JSC.ExpiresAt = time.Now().Add(1 * time.Hour).Unix()
 		return j.CreateToken(*claims)
 	}
-	return "", TokenInvalid
+	return "", invalid
 }

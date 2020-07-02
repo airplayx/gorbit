@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func MakeSign(params map[string]string, key string) string {
+func MakeWxPaySign(params map[string]string, key string) string {
 	var keys []string
 	var sorted []string
 	for k, v := range params {
@@ -26,7 +26,7 @@ func MakeSign(params map[string]string, key string) string {
 	return fmt.Sprintf("%X", md5.Sum([]byte(str)))
 }
 
-func GetNonceStr(n int) string {
+func SetNonceStr(n int) string {
 	var value []byte
 	chars := []byte("abcdefghijklmnopqrstuvwxyz0123456789")
 	m := len(chars)

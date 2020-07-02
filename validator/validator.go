@@ -64,8 +64,7 @@ func check(objType reflect.Type, parent, current reflect.Value) error {
 			var rValueList = mValue.Call(pValue)
 
 			if !rValueList[0].IsNil() {
-				var err = rValueList[0].Interface().(error)
-				return err
+				return rValueList[0].Interface().(error)
 			}
 		}
 	}

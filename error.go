@@ -7,7 +7,7 @@ import (
 	"runtime"
 )
 
-type err struct {
+type e struct {
 	Message string      `json:"message,omitempty"`
 	File    string      `json:"file,omitempty"`
 	Line    int         `json:"line,omitempty"`
@@ -15,7 +15,7 @@ type err struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-func (e *err) Error() string {
+func (e *e) Error() string {
 	var buf bytes.Buffer
 	if e.File != "" {
 		buf.WriteString(fmt.Sprintf("[%s - %s : %d] ", e.File, e.Func, e.Line))
@@ -24,12 +24,12 @@ func (e *err) Error() string {
 	return buf.String()
 }
 
-func (e err) Format(args ...interface{}) *err {
+func (e e) Format(args ...interface{}) *e {
 	e.Message = fmt.Sprintf(e.Message, args...)
 	return &e
 }
 
-func (e err) Location() *err {
+func (e e) Location() *e {
 	pc, file, line, ok := runtime.Caller(1)
 	if ok == false {
 		file = "???"
@@ -42,13 +42,13 @@ func (e err) Location() *err {
 	return &e
 }
 
-func (e err) WithData(data interface{}) *err {
+func (e e) WithData(data interface{}) *e {
 	e.Data = data
 	return &e
 }
 
-func Parse(s string) *err {
-	var e *err
+func Parse(s string) *e {
+	var e *e
 	if err := json.Unmarshal([]byte(s), &e); err != nil {
 		e.Message = s
 		return e

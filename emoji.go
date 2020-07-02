@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func UnicodeEmojiDecode(s string) string {
+func EmojiDecode(s string) string {
 	re := regexp.MustCompile("\\[[\\\\u0-9a-zA-Z]+\\]")
 	reg := regexp.MustCompile("\\[\\\\u|]")
 	src := re.FindAllString(s, -1)
@@ -20,7 +20,7 @@ func UnicodeEmojiDecode(s string) string {
 	return s
 }
 
-func UnicodeEmojiCode(s string) string {
+func EmojiEncode(s string) string {
 	ret := ""
 	rs := []rune(s)
 	for i := 0; i < len(rs); i++ {
