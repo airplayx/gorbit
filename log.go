@@ -19,7 +19,7 @@ var (
 
 	logger      *log.Logger
 	logPrefix   string
-	levelFlags  = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
+	levelFlags  = []string{"DEBUG", "INFO", "WARN", "ERROR"}
 	LogSavePath = ".logs/"
 	LogFileExt  = "log"
 )
@@ -29,7 +29,6 @@ const (
 	INFO
 	WARNING
 	ERROR
-	FATAL
 )
 
 func Debug(v ...interface{}) {
