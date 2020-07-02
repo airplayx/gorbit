@@ -56,12 +56,6 @@ func Error(v ...interface{}) {
 	logger.Println(v...)
 }
 
-func Fatal(v ...interface{}) {
-	file := setPrefix(FATAL)
-	defer file.Close()
-	logger.Println(v...)
-}
-
 func setPrefix(level Level) *os.File {
 	filePath := getLogFileFullPath(level)
 	f, _ = openLogFile(filePath)
