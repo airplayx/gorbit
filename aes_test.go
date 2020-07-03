@@ -10,6 +10,10 @@ import (
 )
 
 func TestAesEncrypt(t *testing.T) {
+	block, err := aes.NewCipher(AesKey)
+	if err != nil {
+		t.Error(err)
+	}
 	msg := pad([]byte(`hello world`))
 	cipherText := make([]byte, aes.BlockSize+len(msg))
 	iv := cipherText[:aes.BlockSize]
@@ -23,6 +27,10 @@ func TestAesEncrypt(t *testing.T) {
 }
 
 func TestAesDecrypt(t *testing.T) {
+	block, err := aes.NewCipher(AesKey)
+	if err != nil {
+		t.Error(err)
+	}
 	secret := `nLK1dPZVOEajDS6tfTT_6NjvsaNzDBj1sHaVQm67-9w`
 	bytes, err := base64.URLEncoding.DecodeString(padding(secret))
 	if err != nil {

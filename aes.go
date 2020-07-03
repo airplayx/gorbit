@@ -12,11 +12,11 @@ import (
 )
 
 var (
-	AesKey     = []byte(`test_my_code_!!!`)
-	block, err = aes.NewCipher(AesKey)
+	AesKey = []byte(`test_my_code_!!!`)
 )
 
 func AesEncrypt(text string) (string, error) {
+	block, err := aes.NewCipher(AesKey)
 	if err != nil {
 		return "", err
 	}
@@ -33,6 +33,7 @@ func AesEncrypt(text string) (string, error) {
 }
 
 func AesDecrypt(text string) (string, error) {
+	block, err := aes.NewCipher(AesKey)
 	if err != nil {
 		return "", err
 	}
