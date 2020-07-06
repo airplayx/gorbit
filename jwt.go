@@ -60,11 +60,11 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	return nil, invalid
 }
 
-func (j *JWT) RefreshToken(tokenString string) (string, error) {
+func (j *JWT) RefreshToken(s string) (string, error) {
 	jwt.TimeFunc = func() time.Time {
 		return time.Unix(0, 0)
 	}
-	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(s, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {

@@ -26,12 +26,12 @@ func MakeWxPaySign(params map[string]string, key string) string {
 	return fmt.Sprintf("%X", md5.Sum([]byte(str)))
 }
 
-func SetNonceStr(n int) string {
+func SetNonceStr(n uint) string {
 	var value []byte
 	chars := []byte("abcdefghijklmnopqrstuvwxyz0123456789")
 	m := len(chars)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for i := 0; i < n; i++ {
+	for i := uint(0); i < n; i++ {
 		value = append(value, chars[r.Intn(m)])
 	}
 	return string(value)
