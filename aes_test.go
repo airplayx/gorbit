@@ -1,51 +1,44 @@
 package gorbit
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
-	"encoding/base64"
-	"io"
 	"testing"
 )
 
-func TestAesEncrypt(t *testing.T) {
-	block, err := aes.NewCipher(AesKey)
-	if err != nil {
-		t.Error(err)
+var (
+	testEncode = []string{"", "hello world", "123", "测试", "~!@#$%^&*()_+:,./|}{][*-+"}
+	testDecode = []string{
+		"E5XWKFZkFGrwiNDajYPNKEnDbr4YsUwo8T5pwpRVVAI",
+		"vkE1fw1DusD9o_Rc_g3THm0Y6eo7dsMtm9UhhiZSoCI",
+		"eeKdAcLPgSdIwi8Mbg48UV7zdH8FCUrtl7tkI7VCSG0",
+		"aqxhq36jLzKxTRJFcxoyga_dOwgvwuc1nC0HyjcNF-E",
+		"4reZrTn-hNeukDUZpFD3qQ1mE59JJthp5sXB4Wn-aNJWeSYNxvXeHyNU2ZRVlwax",
 	}
-	msg := pad([]byte(`hello world`))
-	cipherText := make([]byte, aes.BlockSize+len(msg))
-	iv := cipherText[:aes.BlockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		t.Error(err)
+)
 
+func TestAesEncrypt(t *testing.T) {
+	t.Parallel()
+	for _, v := range testEncode {
+		str, err := AesEncrypt(v)
+		if str == "" {
+			t.Errorf("AesDecrypt Empty: %s", v)
+		}
+		if err != nil {
+			t.Error(err.Error())
+		}
+		t.Logf("AesEncrypt ok: %s => %s", v, str)
 	}
-	cfb := cipher.NewCFBEncrypter(block, iv)
-	cfb.XORKeyStream(cipherText[aes.BlockSize:], msg)
-	t.Log(unPadding(base64.URLEncoding.EncodeToString(cipherText)))
 }
 
 func TestAesDecrypt(t *testing.T) {
-	block, err := aes.NewCipher(AesKey)
-	if err != nil {
-		t.Error(err)
+	t.Parallel()
+	for k, v := range testDecode {
+		str, err := AesDecrypt(v)
+		if err != nil {
+			t.Error(err.Error())
+		}
+		if result := testEncode[k]; str != testEncode[k] {
+			t.Errorf("AesDecrypt fail: %s => %s ,not %s", v, str, result)
+		}
+		t.Logf("AesDecrypt ok: %s => %s", v, str)
 	}
-	secret := `nLK1dPZVOEajDS6tfTT_6NjvsaNzDBj1sHaVQm67-9w`
-	bytes, err := base64.URLEncoding.DecodeString(padding(secret))
-	if err != nil {
-		t.Error(err)
-	}
-	if (len(bytes) % aes.BlockSize) != 0 {
-		t.Error("blockSize must be multiple of decoded message length")
-	}
-	iv := bytes[:aes.BlockSize]
-	msg := bytes[aes.BlockSize:]
-	cfb := cipher.NewCFBDecrypter(block, iv)
-	cfb.XORKeyStream(msg, msg)
-	unPadMsg, err := unPad(msg)
-	if err != nil {
-		t.Error(err)
-	}
-	t.Log(string(unPadMsg))
 }

@@ -1,6 +1,7 @@
 package gorbit
 
 import (
+	"errors"
 	"math/rand"
 	"os"
 	"sort"
@@ -9,7 +10,10 @@ import (
 	"time"
 )
 
-func RandomStr(l int, isNum bool) string {
+func RandomStr(l int, isNum bool) (s string, err error) {
+	if l <= 0 {
+		return "", errors.New("the length must > 0")
+	}
 	str := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	if isNum {
 		str = "0123456789"
@@ -20,7 +24,7 @@ func RandomStr(l int, isNum bool) string {
 	for i := 0; i < l; i++ {
 		result = append(result, bytes[r.Intn(len(bytes))])
 	}
-	return string(result)
+	return string(result), nil
 }
 
 func FileUpTime(file string) (int64, error) {
@@ -36,7 +40,7 @@ func FileUpTime(file string) (int64, error) {
 	return fi.ModTime().Unix(), nil
 }
 
-func SetVersion(ver string, upTime *time.Time) string {
+func SetVersion(ver string, upTime time.Time) string {
 	total := 0
 	arr := []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 	y, month, d := upTime.Date()
