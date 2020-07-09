@@ -18,11 +18,7 @@ type JWT struct {
 
 type CustomClaims struct {
 	User interface{} `json:"user"`
-	JSC  jwt.StandardClaims
-}
-
-func (CustomClaims) Valid() error {
-	return errors.New("CustomClaims fail")
+	jwt.StandardClaims
 }
 
 func NewJWT() *JWT {
@@ -60,11 +56,8 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	return nil, invalid
 }
 
-func (j *JWT) RefreshToken(s string) (string, error) {
-	jwt.TimeFunc = func() time.Time {
-		return time.Unix(0, 0)
-	}
-	token, err := jwt.ParseWithClaims(s, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+func (j *JWT) RefreshToken(tokenString string, expiresAt time.Time) (string, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
@@ -72,7 +65,7 @@ func (j *JWT) RefreshToken(s string) (string, error) {
 	}
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		jwt.TimeFunc = time.Now
-		claims.JSC.ExpiresAt = time.Now().Add(1 * time.Hour).Unix()
+		claims.StandardClaims.ExpiresAt = expiresAt.Unix()
 		return j.CreateToken(*claims)
 	}
 	return "", invalid
