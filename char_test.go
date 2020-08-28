@@ -50,12 +50,46 @@ func TestSetVersion(t *testing.T) {
 	}
 }
 
-func TestHaveFound(t *testing.T) {
-	t.Parallel()
-	t.Log(HaveFound([]string{}, ""))
-	t.Log(HaveFound([]string{""}, ""))
-	t.Log(HaveFound([]string{"1"}, "1"))
-	t.Log(HaveFound([]string{"1"}, "2"))
-	t.Log(HaveFound([]string{""}, "2"))
-	t.Log(HaveFound([]string{"1"}, ""))
+func TestIsExistItem(t *testing.T) {
+	type args struct {
+		key   interface{}
+		array interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "key one",
+			args: args{
+				key:   "aa",
+				array: []string{"aa", "bb", "cc"},
+			},
+			want: true,
+		},
+		{
+			name: "key two",
+			args: args{
+				key:   1,
+				array: []string{"aa", "bb", "cc"},
+			},
+			want: false,
+		},
+		{
+			name: "key three",
+			args: args{
+				key:   uint(1),
+				array: []uint{1, 2, 3},
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := IsExistItem(tt.args.key, tt.args.array); got != tt.want {
+				t.Errorf("IsExistItem() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

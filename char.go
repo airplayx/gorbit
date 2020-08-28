@@ -4,7 +4,7 @@ import (
 	"errors"
 	"math/rand"
 	"os"
-	"sort"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -61,10 +61,15 @@ func SetVersion(ver string, upTime time.Time) string {
 	return ver + upTime.Format("06") + days
 }
 
-func HaveFound(str []string, key string) bool {
-	found := sort.SearchStrings(str, key)
-	if found < len(str) && str[found] == key {
-		return true
+func IsExistItem(key, array interface{}) bool {
+	switch reflect.TypeOf(array).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(array)
+		for i := 0; i < s.Len(); i++ {
+			if reflect.DeepEqual(key, s.Index(i).Interface()) {
+				return true
+			}
+		}
 	}
 	return false
 }
