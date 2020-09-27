@@ -16,12 +16,12 @@ func CheckFileExt(fileName string, allows []string) bool {
 	return false
 }
 
-func Pathname(basePath string) string {
-	basePath = filepath.Base(basePath)
-	for i := len(basePath) - 1; i >= 0; i-- {
-		if basePath[i] == '.' {
-			return basePath[:i]
+func FileCleanName(filePath string) string {
+	filePath = filepath.Base(filePath)
+	for i := len(filePath) - 1; i >= 0; i-- {
+		if filePath[i] == '.' {
+			return filePath[:i]
 		}
 	}
-	return ""
+	return filePath
 }

@@ -10,7 +10,7 @@ func TestCheckFileExt(t *testing.T) {
 	t.Log(CheckFileExt(os.Args[0], []string{".exe", ""}))
 }
 
-func TestPathname(t *testing.T) {
+func TestFileCleanName(t *testing.T) {
 	type args struct {
 		basePath string
 	}
@@ -47,11 +47,32 @@ func TestPathname(t *testing.T) {
 			},
 			want: "css_(:з」∠)_",
 		},
+		{
+			name: "check path name5",
+			args: args{
+				basePath: "....",
+			},
+			want: "...",
+		},
+		{
+			name: "check path name6",
+			args: args{
+				basePath: "",
+			},
+			want: "",
+		},
+		{
+			name: "check path name7",
+			args: args{
+				basePath: "css",
+			},
+			want: "css",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Pathname(tt.args.basePath); got != tt.want {
-				t.Errorf("Pathname() = %v, want %v", got, tt.want)
+			if got := FileCleanName(tt.args.basePath); got != tt.want {
+				t.Errorf("FileCleanName() = %v, want %v", got, tt.want)
 			}
 		})
 	}
