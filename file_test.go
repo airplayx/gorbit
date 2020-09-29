@@ -1,14 +1,8 @@
 package gorbit
 
 import (
-	"os"
 	"testing"
 )
-
-func TestCheckFileExt(t *testing.T) {
-	t.Parallel()
-	t.Log(CheckFileExt(os.Args[0], []string{".exe", ""}))
-}
 
 func TestFileCleanName(t *testing.T) {
 	type args struct {
@@ -73,6 +67,58 @@ func TestFileCleanName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := FileCleanName(tt.args.basePath); got != tt.want {
 				t.Errorf("FileCleanName() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCheckFileExt(t *testing.T) {
+	type args struct {
+		fileName string
+		allows   []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "TestCheckFileExt 1",
+			args: args{
+				fileName: "...dds.exe",
+				allows:   []string{".exe", ".jpg"},
+			},
+			want: true,
+		},
+		{
+			name: "TestCheckFileExt 2",
+			args: args{
+				fileName: "....exe",
+				allows:   []string{".exe", ".jpg"},
+			},
+			want: true,
+		},
+		{
+			name: "TestCheckFileExt 3",
+			args: args{
+				fileName: "....",
+				allows:   []string{".exe", ".jpg"},
+			},
+			want: false,
+		},
+		{
+			name: "TestCheckFileExt 4",
+			args: args{
+				fileName: "......_(:з」∠)_",
+				allows:   []string{"._(:з」∠)_", ".jpg"},
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := CheckFileExt(tt.args.fileName, tt.args.allows); got != tt.want {
+				t.Errorf("CheckFileExt() = %v, want %v", got, tt.want)
 			}
 		})
 	}
