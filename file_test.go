@@ -65,8 +65,8 @@ func TestFileCleanName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FileCleanName(tt.args.basePath); got != tt.want {
-				t.Errorf("FileCleanName() = %v, want %v", got, tt.want)
+			if got := CleanName(tt.args.basePath); got != tt.want {
+				t.Errorf("CleanName() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -117,8 +117,8 @@ func TestCheckFileExt(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CheckFileExt(tt.args.fileName, tt.args.allows); got != tt.want {
-				t.Errorf("CheckFileExt() = %v, want %v", got, tt.want)
+			if got := Ext(tt.args.fileName, tt.args.allows); got != tt.want {
+				t.Errorf("Ext() = %v, want %v", got, tt.want)
 			}
 		})
 	}

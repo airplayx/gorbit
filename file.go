@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func CheckFileExt(fileName string, allows []string) bool {
+func Ext(fileName string, allows []string) bool {
 	ext := path.Ext(fileName)
 	for _, allowExt := range allows {
 		if strings.ToUpper(allowExt) == strings.ToUpper(ext) {
@@ -16,7 +16,7 @@ func CheckFileExt(fileName string, allows []string) bool {
 	return false
 }
 
-func FileCleanName(filePath string) string {
+func CleanName(filePath string) string {
 	filePath = filepath.Base(filePath)
 	for i := len(filePath) - 1; i >= 0; i-- {
 		if filePath[i] == '.' {
