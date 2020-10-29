@@ -1,8 +1,8 @@
 package gorbit
 
 import (
-	"bytes"
 	"encoding/json"
+	"fmt"
 	"math"
 	"strconv"
 	"time"
@@ -47,30 +47,23 @@ func Day0(diffDay int) time.Time {
 }
 
 func TimeDiff(t time.Time) (diffStr string) {
-	var byTime = []float64{365 * 24 * 60 * 60, 24 * 60 * 60, 60 * 60, 60, 1}
-	var unit = []string{"年前", "天前", "小时前", "分钟前", "秒钟前"}
-	ct := time.Now().Sub(t).Seconds()
-	if ct <= 0 {
+	var times = []float64{365 * 24 * 60 * 60, 24 * 60 * 60, 60 * 60, 60, 1}
+	var units = []string{"年前", "天前", "小时前", "分钟前", "秒钟前"}
+	diffTime := time.Now().Sub(t).Seconds()
+	if diffTime <= 0 {
 		return "刚刚"
 	}
-	for k, v := range byTime {
-		if ct < v {
+	for i, matTime := range times {
+		if diffTime < matTime {
 			continue
 		}
-		var temp = math.Floor(float64(ct / v))
-		ct = math.Mod(ct, v)
-		if temp > 0 {
-			var tempStr string
-			tempStr = strconv.FormatFloat(temp, 'f', -1, 64)
-			diffStr = func(args ...string) string {
-				buffer := bytes.Buffer{}
-				for _, s := range args {
-					buffer.WriteString(s)
-				}
-				return buffer.String()
-			}(tempStr, unit[k])
+		if temp := math.Floor(float64(diffTime / matTime)); temp > 0 {
+			return fmt.Sprint(
+				strconv.FormatFloat(temp, 'f', -1, 64),
+				units[i],
+			)
 		}
-		break
+		diffTime = math.Mod(diffTime, matTime)
 	}
 	return
 }
