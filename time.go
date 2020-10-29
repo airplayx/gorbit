@@ -46,32 +46,31 @@ func Day0(diffDay int) time.Time {
 	return timeToday.AddDate(0, 0, diffDay)
 }
 
-func TimeDiff(t time.Time) string {
+func TimeDiff(t time.Time) (diffStr string) {
 	var byTime = []float64{365 * 24 * 60 * 60, 24 * 60 * 60, 60 * 60, 60, 1}
 	var unit = []string{"年前", "天前", "小时前", "分钟前", "秒钟前"}
 	ct := time.Now().Sub(t).Seconds()
-	if ct < 5 {
+	if ct <= 0 {
 		return "刚刚"
 	}
-	var res string
-	for i := 0; i < len(byTime); i++ {
-		if ct < byTime[i] {
+	for k, v := range byTime {
+		if ct < v {
 			continue
 		}
-		var temp = math.Floor(float64(ct / byTime[i]))
-		ct = math.Mod(ct, byTime[i])
+		var temp = math.Floor(float64(ct / v))
+		ct = math.Mod(ct, v)
 		if temp > 0 {
 			var tempStr string
 			tempStr = strconv.FormatFloat(temp, 'f', -1, 64)
-			res = func(args ...string) string {
+			diffStr = func(args ...string) string {
 				buffer := bytes.Buffer{}
-				for i := 0; i < len(args); i++ {
-					buffer.WriteString(args[i])
+				for _, s := range args {
+					buffer.WriteString(s)
 				}
 				return buffer.String()
-			}(tempStr, unit[i])
+			}(tempStr, unit[k])
 		}
 		break
 	}
-	return res
+	return
 }
