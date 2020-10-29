@@ -47,12 +47,15 @@ func Day0(diffDay int) time.Time {
 
 func TimeDiff(t time.Time) (diffStr string) {
 	var times = []float64{365 * 24 * 60 * 60, 24 * 60 * 60, 60 * 60, 60, 1}
-	var units = []string{"年前", "天前", "小时前", "分钟前", "秒钟前"}
+	var units = []string{"年", "天", "小时", "分钟", "秒"}
 
 	diffTime := time.Now().Sub(t).Seconds()
-	if diffTime <= 0 {
+	if diffTime <= times[len(times)-1] {
 		return "刚刚"
 	}
+	defer func() {
+		diffStr += "前"
+	}()
 	for i, matTime := range times {
 		if diffTime < matTime {
 			continue
