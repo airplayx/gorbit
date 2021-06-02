@@ -5,8 +5,9 @@ import (
 )
 
 var (
-	testEncode = []string{"", "hello world", "123", "测试", "~!@#$%^&*()_+:,./|}{][*-+"}
+	testEncode = []string{"", "", "hello world", "123", "测试", "~!@#$%^&*()_+:,./|}{][*-+"}
 	testDecode = []string{
+		"",
 		"E5XWKFZkFGrwiNDajYPNKEnDbr4YsUwo8T5pwpRVVAI",
 		"vkE1fw1DusD9o_Rc_g3THm0Y6eo7dsMtm9UhhiZSoCI",
 		"eeKdAcLPgSdIwi8Mbg48UV7zdH8FCUrtl7tkI7VCSG0",

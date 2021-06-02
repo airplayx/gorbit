@@ -33,6 +33,9 @@ func AesEncrypt(text string) (string, error) {
 }
 
 func AesDecrypt(text string) (string, error) {
+	if text == "" {
+		return "", errors.New("the decryption strings cannot be empty")
+	}
 	block, err := aes.NewCipher(AesKey)
 	if err != nil {
 		return "", err
