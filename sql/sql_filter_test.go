@@ -1,4 +1,4 @@
-package gorbit
+package sql
 
 import "testing"
 
@@ -36,8 +36,8 @@ func TestFilteredSQLStr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FilteredSQLStr(tt.args.matchStr, tt.args.exactly); got != tt.want {
-				t.Errorf("FilteredSQLStr() = %v, want %v", got, tt.want)
+			if got := SafeString(tt.args.matchStr, tt.args.exactly); got != tt.want {
+				t.Errorf("SafeString() = %v, want %v", got, tt.want)
 			}
 		})
 	}

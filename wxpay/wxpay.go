@@ -1,4 +1,4 @@
-package gorbit
+package wxpay
 
 import (
 	"crypto/md5"
@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func MakeWxPaySign(params map[string]string, key string) string {
+func PaySign(params map[string]string, key string) string {
 	var keys []string
 	var sorted []string
 	for k, v := range params {
@@ -26,7 +26,7 @@ func MakeWxPaySign(params map[string]string, key string) string {
 	return fmt.Sprintf("%X", md5.Sum([]byte(str)))
 }
 
-func SetNonceStr(n uint) string {
+func NonceStr(n uint) string {
 	var value []byte
 	chars := []byte("abcdefghijklmnopqrstuvwxyz0123456789")
 	m := len(chars)

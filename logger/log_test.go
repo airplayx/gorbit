@@ -1,4 +1,4 @@
-package gorbit
+package logger
 
 import "testing"
 

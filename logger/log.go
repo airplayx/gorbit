@@ -1,4 +1,4 @@
-package gorbit
+package logger
 
 import (
 	"fmt"
@@ -17,11 +17,11 @@ var (
 	DefaultPrefix      = ""
 	DefaultCallerDepth = 2
 
-	logger      *log.Logger
-	logPrefix   string
-	levelFlags  = []string{"DEBUG", "INFO", "WARN", "ERROR"}
-	LogSavePath = ".logs/"
-	LogFileExt  = "log"
+	logger     *log.Logger
+	logPrefix  string
+	levelFlags = []string{"DEBUG", "INFO", "WARN", "ERROR"}
+	SavePath   = ".logs/"
+	FileExt    = "log"
 )
 
 const (
@@ -72,11 +72,11 @@ func setPrefix(level Level) *os.File {
 }
 
 func getLogFilePath() string {
-	return fmt.Sprintf("%s/", LogSavePath)
+	return fmt.Sprintf("%s/", SavePath)
 }
 
 func getLogFileFullPath(level Level) string {
-	suffixPath := fmt.Sprintf("%s.%s", levelFlags[level]+"-"+time.Now().Format("2006-01-02"), LogFileExt)
+	suffixPath := fmt.Sprintf("%s.%s", levelFlags[level]+"-"+time.Now().Format("2006-01-02"), FileExt)
 	return fmt.Sprintf("%s%s", getLogFilePath(), suffixPath)
 }
 

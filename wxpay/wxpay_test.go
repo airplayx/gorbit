@@ -1,4 +1,4 @@
-package gorbit
+package wxpay
 
 import (
 	"encoding/xml"
@@ -72,11 +72,11 @@ func TestMakeWxPaySign(t *testing.T) {
 			str[key] = value
 		}
 	}
-	t.Log(MakeWxPaySign(str, "Wohexiaoyujintianyaogaimimabixu3"))
+	t.Log(PaySign(str, "Wohexiaoyujintianyaogaimimabixu3"))
 }
 
 func TestSetNonceStr(t *testing.T) {
 	t.Parallel()
-	t.Log(SetNonceStr(0))
-	t.Log(SetNonceStr(20))
+	t.Log(NonceStr(0))
+	t.Log(NonceStr(20))
 }

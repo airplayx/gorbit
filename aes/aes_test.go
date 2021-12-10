@@ -1,4 +1,4 @@
-package gorbit
+package aes
 
 import (
 	"testing"
@@ -19,7 +19,7 @@ var (
 func TestAesEncrypt(t *testing.T) {
 	t.Parallel()
 	for _, v := range testEncode {
-		str, err := AesEncrypt(v)
+		str, err := Encrypt(v)
 		if str == "" {
 			t.Errorf("AesDecrypt Empty: %s", v)
 		}
@@ -33,7 +33,7 @@ func TestAesEncrypt(t *testing.T) {
 func TestAesDecrypt(t *testing.T) {
 	t.Parallel()
 	for k, v := range testDecode {
-		str, err := AesDecrypt(v)
+		str, err := Decrypt(v)
 		if err != nil {
 			t.Error(err.Error())
 		}

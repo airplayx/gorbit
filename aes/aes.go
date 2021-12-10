@@ -1,4 +1,4 @@
-package gorbit
+package aes
 
 import (
 	"bytes"
@@ -12,11 +12,11 @@ import (
 )
 
 var (
-	AesKey = []byte(`test_my_code_!!!`)
+	Key = []byte(`test_my_code_!!!`)
 )
 
-func AesEncrypt(text string) (string, error) {
-	block, err := aes.NewCipher(AesKey)
+func Encrypt(text string) (string, error) {
+	block, err := aes.NewCipher(Key)
 	if err != nil {
 		return "", err
 	}
@@ -32,11 +32,11 @@ func AesEncrypt(text string) (string, error) {
 	return finalMsg, nil
 }
 
-func AesDecrypt(text string) (string, error) {
+func Decrypt(text string) (string, error) {
 	if text == "" {
 		return "", errors.New("the decryption strings cannot be empty")
 	}
-	block, err := aes.NewCipher(AesKey)
+	block, err := aes.NewCipher(Key)
 	if err != nil {
 		return "", err
 	}

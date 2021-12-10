@@ -1,16 +1,15 @@
-package gorbit
+package char
 
 import (
 	"errors"
 	"math/rand"
-	"os"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func RandomStr(l int, isNum bool) (s string, err error) {
+func Random(l int, isNum bool) (s string, err error) {
 	if l <= 0 {
 		return "", errors.New("the length must > 0")
 	}
@@ -27,23 +26,10 @@ func RandomStr(l int, isNum bool) (s string, err error) {
 	return string(result), nil
 }
 
-func FileUpTime(file string) (int64, error) {
-	f, err := os.Open(file)
-	if err != nil {
-		return time.Now().Unix(), err
-	}
-	defer f.Close()
-	fi, err := f.Stat()
-	if err != nil {
-		return time.Now().Unix(), err
-	}
-	return fi.ModTime().Unix(), nil
-}
-
-func SetVersion(ver string, upTime time.Time) string {
+func Version(ver string, t time.Time) string {
 	total := 0
 	arr := []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-	y, month, d := upTime.Date()
+	y, month, d := t.Date()
 	m := int(month)
 	for i := 0; i < m-1; i++ {
 		total = total + arr[i]
@@ -58,10 +44,27 @@ func SetVersion(ver string, upTime time.Time) string {
 	if count < 3 {
 		days = strings.Repeat("0", 3-count) + days
 	}
-	return ver + upTime.Format("06") + days
+	return ver + t.Format("06") + days
 }
 
-func IsExistItem(key, array interface{}) bool {
+func DaysInYear() int {
+	now := time.Now()
+	total := 0
+	arr := []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+	y, month, d := now.Date()
+	m := int(month)
+	for i := 0; i < m-1; i++ {
+		total = total + arr[i]
+	}
+	if (y%400 == 0 || (y%4 == 0 && y%100 != 0)) && m > 2 {
+		total = total + d + 1
+	} else {
+		total = total + d
+	}
+	return total
+}
+
+func Exist(key, array interface{}) bool {
 	switch reflect.TypeOf(array).Kind() {
 	case reflect.Slice:
 		s := reflect.ValueOf(array)

@@ -1,7 +1,6 @@
-package gorbit
+package char
 
 import (
-	"os"
 	"testing"
 	"time"
 )
@@ -17,7 +16,7 @@ func TestRandomStr(t *testing.T) {
 	}
 	for _, v := range testChar {
 		for key, value := range v {
-			result, err := RandomStr(key, value)
+			result, err := Random(key, value)
 			if err != nil {
 				t.Logf("RandomStr fail: [%d , %t] => %s", key, value, err.Error())
 				continue
@@ -25,12 +24,6 @@ func TestRandomStr(t *testing.T) {
 			t.Logf("RandomStr ok: [%d , %t] => %s", key, value, result)
 		}
 	}
-}
-
-func TestFileUpTime(t *testing.T) {
-	t.Parallel()
-	t.Log(FileUpTime(os.Args[0]))
-	t.Log(FileUpTime(""))
 }
 
 func TestSetVersion(t *testing.T) {
@@ -41,7 +34,7 @@ func TestSetVersion(t *testing.T) {
 	}
 	for _, v := range testVer {
 		for key, value := range v {
-			result := SetVersion(key, value)
+			result := Version(key, value)
 			if result == "" {
 				t.Errorf("RandomStr fail: [%s , %v] => ''", key, value)
 			}
@@ -87,9 +80,14 @@ func TestIsExistItem(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IsExistItem(tt.args.key, tt.args.array); got != tt.want {
+			if got := Exist(tt.args.key, tt.args.array); got != tt.want {
 				t.Errorf("IsExistItem() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func TestDaysInYear(t *testing.T) {
+	t.Parallel()
+	t.Log(DaysInYear())
 }

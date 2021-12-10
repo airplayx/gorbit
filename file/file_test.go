@@ -1,6 +1,7 @@
-package gorbit
+package file
 
 import (
+	"os"
 	"testing"
 )
 
@@ -117,9 +118,15 @@ func TestCheckFileExt(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Ext(tt.args.fileName, tt.args.allows); got != tt.want {
-				t.Errorf("Ext() = %v, want %v", got, tt.want)
+			if got := Exist(tt.args.fileName, tt.args.allows); got != tt.want {
+				t.Errorf("Exist() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func TestFileUpTime(t *testing.T) {
+	t.Parallel()
+	t.Log(UpdateTime(os.Args[0]))
+	t.Log(UpdateTime(""))
 }
