@@ -1,4 +1,4 @@
-package time
+package timeparser
 
 import (
 	"testing"
@@ -53,8 +53,8 @@ func TestTimeDiff(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := TimeDiff(tt.args.t); got != tt.want {
-				t.Errorf("TimeDiff() = %v, want %v", got, tt.want)
+			if got := Diff(tt.args.t); got != tt.want {
+				t.Errorf("Diff() = %v, want %v", got, tt.want)
 			}
 		})
 	}

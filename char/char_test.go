@@ -80,7 +80,7 @@ func TestIsExistItem(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Exist(tt.args.key, tt.args.array); got != tt.want {
+			if got := InArray(tt.args.key, tt.args.array); got != tt.want {
 				t.Errorf("IsExistItem() = %v, want %v", got, tt.want)
 			}
 		})

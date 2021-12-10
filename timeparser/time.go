@@ -1,4 +1,4 @@
-package time
+package timeparser
 
 import (
 	"encoding/json"
@@ -45,7 +45,7 @@ func Day0(diffDay int) time.Time {
 	return timeToday.AddDate(0, 0, diffDay)
 }
 
-func TimeDiff(t time.Time) (diffStr string) {
+func Diff(t time.Time) (diffStr string) {
 	var times = []float64{365 * 24 * 60 * 60, 24 * 60 * 60, 60 * 60, 60, 1}
 	var units = []string{"年", "天", "小时", "分钟", "秒"}
 

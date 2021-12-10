@@ -1,4 +1,4 @@
-package json2go
+package jsonparser
 
 import (
 	"fmt"

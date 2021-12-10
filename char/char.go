@@ -64,7 +64,7 @@ func DaysInYear() int {
 	return total
 }
 
-func Exist(key, array interface{}) bool {
+func InArray(key, array interface{}) bool {
 	switch reflect.TypeOf(array).Kind() {
 	case reflect.Slice:
 		s := reflect.ValueOf(array)
