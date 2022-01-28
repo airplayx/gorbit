@@ -16,3 +16,4 @@
 .idea
 *.syso
 *.log
+/go.sum
