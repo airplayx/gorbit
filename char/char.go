@@ -9,12 +9,12 @@ import (
 	"time"
 )
 
-func Random(l int, isNum bool) (s string, err error) {
+func Random(l int, haveNum bool) (s string, err error) {
 	if l <= 0 {
 		return "", errors.New("the length must > 0")
 	}
 	str := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	if isNum {
+	if haveNum {
 		str = "0123456789"
 	}
 	bytes := []byte(str)
@@ -64,14 +64,18 @@ func DaysInYear() int {
 	return total
 }
 
-func InArray(key, array interface{}) bool {
-	switch reflect.TypeOf(array).Kind() {
-	case reflect.Slice:
-		s := reflect.ValueOf(array)
-		for i := 0; i < s.Len(); i++ {
-			if reflect.DeepEqual(key, s.Index(i).Interface()) {
+func InArray(obj, target interface{}) bool {
+	targetValue := reflect.ValueOf(target)
+	switch reflect.TypeOf(target).Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < targetValue.Len(); i++ {
+			if targetValue.Index(i).Interface() == obj {
 				return true
 			}
+		}
+	case reflect.Map:
+		if targetValue.MapIndex(reflect.ValueOf(obj)).IsValid() {
+			return true
 		}
 	}
 	return false
